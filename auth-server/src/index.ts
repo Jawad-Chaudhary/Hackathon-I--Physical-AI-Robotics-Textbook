@@ -18,7 +18,7 @@ const PORT = process.env.AUTH_PORT || 3001;
 // CORS configuration
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:8000"],
+    origin: ["http://localhost:3000", "http://localhost:8000","https://hackathon-i-physical-ai-robotics-te.vercel.app/"],
     credentials: true,
   })
 );
