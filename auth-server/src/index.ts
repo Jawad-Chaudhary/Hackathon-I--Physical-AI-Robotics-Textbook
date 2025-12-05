@@ -8,8 +8,8 @@ import express from "express";
 import cors from "cors";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth.js";
-import { db } from "./db";
-import { session, user } from "./schema";
+import { db } from "./db.js";
+import { session, user } from "./schema.js";
 import { eq } from "drizzle-orm";
 
 const app = express();
