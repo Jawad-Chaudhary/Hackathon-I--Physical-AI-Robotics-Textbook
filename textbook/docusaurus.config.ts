@@ -8,6 +8,11 @@ const config: Config = {
   title: 'Physical AI & Humanoid Textbook',
   tagline: 'Learn Physical AI, Robotics, and ROS 2',
   favicon: 'img/favicon.ico',
+  customFields: {
+    // Falls back to localhost if the env var isn't set
+    authUrl: process.env.AUTH_URL || 'http://localhost:3001', 
+    apiUrl: process.env.API_URL || 'http://localhost:8000',
+  },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -15,7 +20,7 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://YOUR_GITHUB_USERNAME.github.io',
+  url: 'https://hackathon-i-physical-ai-robotics-te.vercel.app/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '',

@@ -27,7 +27,7 @@ app = FastAPI(
 # CORS Configuration (allow Docusaurus frontend)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # Docusaurus dev server
+    allow_origins=["http://localhost:3000", "http://localhost:3001","https://hackathon-i-physical-ai-robotics-te.vercel.app/"],  # Docusaurus dev server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

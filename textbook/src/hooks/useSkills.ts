@@ -4,8 +4,8 @@
  */
 
 import { useState, useCallback } from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'; // 👈 Added Import
 
-const API_BASE_URL = 'http://localhost:8000';
 const TOKEN_KEY = 'better_auth_token';
 
 interface SkillsState {
@@ -24,6 +24,10 @@ interface TranslateResponse {
 }
 
 export function useSkills() {
+  // ✅ Fix 1: Get URL from Docusaurus Config
+  const { siteConfig } = useDocusaurusContext();
+  const API_BASE_URL = siteConfig.customFields?.apiUrl as string;
+
   const [state, setState] = useState<SkillsState>({
     isLoading: false,
     error: null,
@@ -58,6 +62,7 @@ export function useSkills() {
           chapter_slug: chapterSlug,
           content: content,
         }),
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -82,7 +87,7 @@ export function useSkills() {
       alert(`Personalization failed: ${errorMessage}`);
       return null;
     }
-  }, []);
+  }, [API_BASE_URL]);
 
   const translateChapter = useCallback(async (
     chapterSlug: string,
@@ -111,6 +116,7 @@ export function useSkills() {
           content: content,
           target_language: targetLanguage,
         }),
+        credentials: 'include', // 👈 Added missing credentials
       });
 
       if (!response.ok) {
@@ -135,7 +141,7 @@ export function useSkills() {
       alert(`Translation failed: ${errorMessage}`);
       return null;
     }
-  }, []);
+  }, [API_BASE_URL]);
 
   return {
     ...state,

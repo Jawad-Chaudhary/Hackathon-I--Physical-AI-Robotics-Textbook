@@ -1,11 +1,7 @@
-/**
- * Authentication hook using Better-Auth
- * Stores token for cross-origin API calls
- */
-
 import { useState, useEffect, useCallback } from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
-const AUTH_URL = 'http://localhost:3001';
+// Define keys
 const TOKEN_KEY = 'better_auth_token';
 const USER_KEY = 'better_auth_user';
 
@@ -38,6 +34,10 @@ interface SignupData extends LoginCredentials {
 }
 
 export function useAuth() {
+  // 1. Get the URL from Docusaurus Config
+  const { siteConfig } = useDocusaurusContext();
+  const AUTH_URL = siteConfig.customFields?.authUrl as string;
+
   const [state, setState] = useState<AuthState>({
     token: null,
     user: null,
@@ -46,7 +46,6 @@ export function useAuth() {
     error: null,
   });
 
-  // Load from localStorage on mount
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_KEY);
     const userStr = localStorage.getItem(USER_KEY);
@@ -78,7 +77,7 @@ export function useAuth() {
       const response = await fetch(`${AUTH_URL}/api/auth/sign-in/email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
+        credentials: 'include', // Critical for Cookies
         body: JSON.stringify({
           email: credentials.email,
           password: credentials.password,
@@ -91,7 +90,10 @@ export function useAuth() {
       }
 
       const data = await response.json();
-      const token = data.token;
+      
+      // 2. Safe Token Extraction (Handle different Better Auth responses)
+      const token = data.token || data.session?.token;
+      
       const user = {
         id: data.user.id,
         email: data.user.email,
@@ -101,7 +103,6 @@ export function useAuth() {
         experience_level: data.user.experienceLevel || 'beginner',
       };
 
-      // Store in localStorage for cross-origin API calls
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(USER_KEY, JSON.stringify(user));
 
@@ -122,7 +123,7 @@ export function useAuth() {
       }));
       return false;
     }
-  }, []);
+  }, [AUTH_URL]); // dependency on AUTH_URL
 
   const signup = useCallback(async (data: SignupData): Promise<boolean> => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
@@ -148,7 +149,8 @@ export function useAuth() {
       }
 
       const responseData = await response.json();
-      const token = responseData.token;
+      const token = responseData.token || responseData.session?.token;
+      
       const user = {
         id: responseData.user.id,
         email: responseData.user.email,
@@ -158,7 +160,6 @@ export function useAuth() {
         experience_level: responseData.user.experienceLevel || 'beginner',
       };
 
-      // Store in localStorage
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(USER_KEY, JSON.stringify(user));
 
@@ -179,7 +180,7 @@ export function useAuth() {
       }));
       return false;
     }
-  }, []);
+  }, [AUTH_URL]);
 
   const logout = useCallback(async () => {
     try {
@@ -201,7 +202,12 @@ export function useAuth() {
       isLoading: false,
       error: null,
     });
-  }, []);
+    
+    // Redirect to login after logout
+    if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+    }
+  }, [AUTH_URL]);
 
   return {
     ...state,

@@ -1,25 +1,31 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
+import { useHistory } from '@docusaurus/router'; // 👈 Use Docusaurus Router
 import { useAuth } from '../hooks/useAuth';
 
 export default function LoginPage(): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, isLoading, error, isAuthenticated } = useAuth();
+  const history = useHistory(); // 👈 Initialize history
 
   // Redirect if already authenticated
-  if (isAuthenticated && typeof window !== 'undefined') {
-    window.location.href = '/docs/';
-    return null;
-  }
+  // We use useEffect to handle side effects properly
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/docs/');
+    }
+  }, [isAuthenticated, history]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await login({ email, password });
-    if (success && typeof window !== 'undefined') {
-      window.location.href = '/docs/';
+    if (success) {
+      history.push('/docs/intro'); // 👈 Instant SPA navigation
     }
   };
+
+  if (isAuthenticated) return null; // Prevent flash of login content
 
   return (
     <Layout title="Login" description="Login to access AI features">
@@ -174,10 +180,15 @@ export default function LoginPage(): JSX.Element {
             Don't have an account?{' '}
             <a
               href="/signup"
+              onClick={(e) => {
+                e.preventDefault();
+                history.push('/signup');
+              }}
               style={{
                 color: '#0d6efd',
                 textDecoration: 'none',
                 fontWeight: 500,
+                cursor: 'pointer',
               }}
             >
               Sign up

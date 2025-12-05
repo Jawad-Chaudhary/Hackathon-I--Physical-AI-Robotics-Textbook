@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext'; // 👈 Added Import
 
-const API_BASE_URL = 'http://localhost:8000';
-const TOKEN_KEY = 'auth_token';
+// ✅ Fix 2: Match the key used in useAuth
+const TOKEN_KEY = 'better_auth_token'; 
 
 interface Message {
   id: string;
@@ -23,6 +24,10 @@ interface ChatResponse {
 }
 
 export function useChat() {
+  // ✅ Fix 1: Get URL from Docusaurus Config instead of process.env
+  const { siteConfig } = useDocusaurusContext();
+  const API_BASE_URL = siteConfig.customFields?.apiUrl as string;
+
   const [state, setState] = useState<ChatState>({
     messages: [],
     isLoading: false,
@@ -39,12 +44,12 @@ export function useChat() {
 
   const sendMessage = useCallback(async (content: string): Promise<void> => {
     const token = getToken();
+    
     if (!token) {
-      setState(prev => ({ ...prev, error: 'Not authenticated' }));
+      setState(prev => ({ ...prev, error: 'Not authenticated. Please log in.' }));
       return;
     }
 
-    // Add user message
     const userMessage: Message = {
       id: generateId(),
       role: 'user',
@@ -67,6 +72,7 @@ export function useChat() {
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ message: content }),
+        credentials: 'include', 
       });
 
       if (!response.ok) {
@@ -76,7 +82,6 @@ export function useChat() {
 
       const data: ChatResponse = await response.json();
 
-      // Add assistant message
       const assistantMessage: Message = {
         id: generateId(),
         role: 'assistant',
@@ -91,6 +96,7 @@ export function useChat() {
         isLoading: false,
         error: null,
       }));
+
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Chat request failed';
       setState(prev => ({
@@ -99,7 +105,7 @@ export function useChat() {
         error: errorMessage,
       }));
     }
-  }, []);
+  }, [API_BASE_URL]); // Added dependency
 
   const clearMessages = useCallback(() => {
     setState({

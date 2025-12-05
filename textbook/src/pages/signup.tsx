@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
+import { useHistory } from '@docusaurus/router'; // 👈 Use Router
 import { useAuth } from '../hooks/useAuth';
 
 export default function SignupPage(): JSX.Element {
@@ -9,12 +10,14 @@ export default function SignupPage(): JSX.Element {
   const [hasNvidiaGpu, setHasNvidiaGpu] = useState(false);
   const [experienceLevel, setExperienceLevel] = useState('beginner');
   const { signup, isLoading, error, isAuthenticated } = useAuth();
+  const history = useHistory();
 
   // Redirect if already authenticated
-  if (isAuthenticated && typeof window !== 'undefined') {
-    window.location.href = '/docs/';
-    return null;
-  }
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/docs/intro');
+    }
+  }, [isAuthenticated, history]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,10 +28,12 @@ export default function SignupPage(): JSX.Element {
       has_nvidia_gpu: hasNvidiaGpu,
       experience_level: experienceLevel,
     });
-    if (success && typeof window !== 'undefined') {
-      window.location.href = '/docs/';
+    if (success) {
+      history.push('/docs/intro');
     }
   };
+
+  if (isAuthenticated) return null;
 
   return (
     <Layout title="Sign Up" description="Create an account to access AI features">
@@ -279,10 +284,15 @@ export default function SignupPage(): JSX.Element {
             Already have an account?{' '}
             <a
               href="/login"
+              onClick={(e) => {
+                e.preventDefault();
+                history.push('/login');
+              }}
               style={{
                 color: '#0d6efd',
                 textDecoration: 'none',
                 fontWeight: 500,
+                cursor: 'pointer',
               }}
             >
               Log in
