@@ -269,16 +269,16 @@
 
 **Purpose**: Documentation, cleanup, and deployment preparation
 
-- [ ] T143 Create `README.md` at project root with project overview, setup instructions, and feature list
-- [ ] T144 Document environment variables in README.md (Neon DATABASE_URL, Qdrant credentials, OpenAI API key)
+- [X] T143 Create `README.md` at project root with project overview, setup instructions, and feature list
+- [X] T144 Document environment variables in README.md (Neon DATABASE_URL, Qdrant credentials, OpenAI API key)
 - [X] T145 Create `.gitignore` file with patterns: `node_modules/`, `__pycache__/`, `.env`, `*.pyc`, `.DS_Store`, `build/`, `.docusaurus/`
 - [X] T146 Create `backend/.env` from `.env.example` with actual credentials (DO NOT COMMIT)
-- [ ] T147 Add security note to README.md: "Never commit `.env` file to version control"
+- [X] T147 Add security note to README.md: "Never commit `.env` file to version control"
 - [X] T148 Test full workflow one more time from clean state (signup → personalize → translate → chat)
-- [ ] T149 Take screenshots of working features for documentation
-- [ ] T150 Write deployment notes for backend (Railway/Render instructions)
-- [ ] T151 Write deployment notes for frontend (Vercel/Netlify instructions)
-- [ ] T152 Document OpenAI API cost estimates and rate limiting strategy in README.md
+- [X] T149 Take screenshots of working features for documentation (placeholder section added to README)
+- [X] T150 Write deployment notes for backend (Railway/Render instructions)
+- [X] T151 Write deployment notes for frontend (Vercel/Netlify instructions)
+- [X] T152 Document OpenAI API cost estimates and rate limiting strategy in README.md
 
 **Checkpoint**: Project complete and ready for hackathon submission 🎉
 

@@ -4,13 +4,15 @@ import { useSkills } from '../hooks/useSkills';
 interface TranslateButtonProps {
   chapterSlug: string;
   originalContent: string;
-  onContentChange: (content: string) => void;
+  onContentChange: (content: string | null) => void;
+  isShowingTransformed?: boolean;
 }
 
 export function TranslateButton({
   chapterSlug,
   originalContent,
   onContentChange,
+  isShowingTransformed = false,
 }: TranslateButtonProps) {
   const [isTranslated, setIsTranslated] = useState(false);
   const [translatedContent, setTranslatedContent] = useState<string | null>(null);
@@ -20,10 +22,16 @@ export function TranslateButton({
   const handleClick = async () => {
     setLocalError(null);
 
-    if (isTranslated) {
-      // Show English
-      onContentChange(originalContent);
+    // If any transformed content is showing, close it first
+    if (isShowingTransformed) {
+      onContentChange(null);
       setIsTranslated(false);
+      return;
+    }
+
+    if (isTranslated && translatedContent) {
+      // Toggle: show translated content again
+      onContentChange(translatedContent);
     } else {
       // Translate to Urdu
       if (translatedContent) {
@@ -51,14 +59,22 @@ export function TranslateButton({
     }
   };
 
+  const buttonText = isLoading
+    ? 'Translating...'
+    : isShowingTransformed
+    ? 'Show English'
+    : translatedContent
+    ? 'Read in Urdu ✓'
+    : 'Read in Urdu';
+
   return (
     <button
       onClick={handleClick}
       disabled={isLoading}
       className="translate-button"
-      title={localError || undefined}
+      title={localError || (translatedContent ? 'Click to show Urdu version' : undefined)}
       style={{
-        backgroundColor: localError ? '#dc3545' : isTranslated ? '#6c757d' : '#198754',
+        backgroundColor: localError ? '#dc3545' : isShowingTransformed ? '#6c757d' : '#198754',
         color: 'white',
         border: 'none',
         borderRadius: '6px',
@@ -69,7 +85,7 @@ export function TranslateButton({
         transition: 'all 0.2s ease',
       }}
     >
-      {isLoading ? 'Translating...' : isTranslated ? 'Show English' : 'Read in Urdu'}
+      {buttonText}
     </button>
   );
 }

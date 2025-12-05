@@ -240,6 +240,7 @@ B) A communication protocol used between nodes
 C) A part of a robot that performs physical actions
 D) A language used to program robots
 **Answer**: A
+:::
 
 :::note Question 2
 What is a fundamental function of a publisher in ROS 2?
@@ -248,6 +249,7 @@ B) It receives messages from a topic
 C) It listens for messages on a specific topic
 D) It creates new topics
 **Answer**: A
+:::
 
 :::note Question 3
 Which of the following is NOT a Quality of Service (QoS) policy in ROS 2?
@@ -256,6 +258,7 @@ B) Durability
 C) History
 D) Speed
 **Answer**: D
+:::
 
 :::note Question 4
 What is the purpose of the `node.destroy_node()` and `rclpy.shutdown()` commands in ROS 2?
@@ -264,6 +267,7 @@ B) To update the node with new data
 C) To properly handle the lifecycle of the node and shut it down
 D) To restart the node in case of errors
 **Answer**: C
+:::
 
 :::note Question 5
 What is the best practice regarding message types in ROS 2?
@@ -272,3 +276,4 @@ B) Always use standard messages
 C) Use standard message types whenever possible, create custom messages only when necessary
 D) The type of message doesn't matter, as long as it works
 **Answer**: C
+:::

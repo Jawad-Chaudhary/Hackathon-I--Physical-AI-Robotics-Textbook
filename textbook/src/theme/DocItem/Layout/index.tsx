@@ -1,4 +1,5 @@
-import React, { type ReactNode, useState, useEffect, useRef } from 'react';
+import React, { type ReactNode, useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import Layout from '@theme-original/DocItem/Layout';
 import type LayoutType from '@theme/DocItem/Layout';
 import type { WrapperProps } from '@docusaurus/types';
@@ -13,18 +14,79 @@ import { useAuth } from '@site/src/hooks/useAuth';
 
 type Props = WrapperProps<typeof LayoutType>;
 
+interface ContentOverlayProps {
+  content: string | null;
+  onClose: () => void;
+}
+
+// Overlay component that renders transformed content without mutating the DOM
+function ContentOverlay({ content, onClose }: ContentOverlayProps) {
+  if (!content) return null;
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 1000,
+        backgroundColor: 'var(--ifm-background-color, #fff)',
+        overflow: 'auto',
+      }}
+    >
+      <div
+        style={{
+          maxWidth: '800px',
+          margin: '0 auto',
+          padding: '20px',
+        }}
+      >
+        <button
+          onClick={onClose}
+          style={{
+            position: 'sticky',
+            top: '10px',
+            float: 'right',
+            padding: '8px 16px',
+            backgroundColor: '#dc3545',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            zIndex: 1001,
+          }}
+        >
+          ✕ Close & Show Original
+        </button>
+        <div
+          className="theme-doc-markdown markdown"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
+      </div>
+    </div>
+  );
+}
+
 function DocItemToolbar() {
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
   const [originalContent, setOriginalContent] = useState<string>('');
+  const [transformedContent, setTransformedContent] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // Extract chapter slug from URL
   const chapterSlug = location.pathname.split('/').filter(Boolean).pop() || 'intro';
 
-  // Get the document content after DOM is ready
+  // Get the document content after DOM is ready (read-only)
   useEffect(() => {
+    // Reset state on page change
+    setTransformedContent(null);
+    setIsReady(false);
+    setOriginalContent('');
+
     const findContent = () => {
       const selectors = [
         '.theme-doc-markdown',
@@ -32,7 +94,7 @@ function DocItemToolbar() {
         '.markdown',
         'article',
       ];
-      
+
       for (const selector of selectors) {
         const element = document.querySelector(selector);
         if (element && element.innerHTML.length > 100) {
@@ -54,37 +116,30 @@ function DocItemToolbar() {
       }
     };
 
-    attemptFind(0);
+    // Small delay to ensure DOM is rendered
+    const timer = setTimeout(() => attemptFind(0), 100);
+    return () => clearTimeout(timer);
   }, [location.pathname]);
 
-  // Insert toolbar at the top of the article
-  useEffect(() => {
-    if (containerRef.current && isReady) {
-      const articleContent = document.querySelector('.theme-doc-markdown');
-      if (articleContent && articleContent.parentElement) {
-        articleContent.parentElement.insertBefore(containerRef.current, articleContent);
-      }
-    }
-  }, [isReady]);
+  // Handle content changes - now using React state instead of DOM mutation
+  const handleContentChange = (newContent: string | null) => {
+    setTransformedContent(newContent);
+  };
 
-  // Handle content changes
-  const handleContentChange = (newContent: string) => {
-    const element = document.querySelector('.theme-doc-markdown');
-    if (element) {
-      element.innerHTML = newContent;
-    }
+  // Close overlay and show original
+  const handleCloseOverlay = () => {
+    setTransformedContent(null);
   };
 
   console.log('[DocItemToolbar] Render state:', { isLoading, isAuthenticated, isReady, contentLength: originalContent.length });
 
   if (isLoading) {
-    return <div ref={containerRef} style={{ padding: '12px', color: '#888' }}>Checking auth...</div>;
+    return null;
   }
 
   if (!isAuthenticated) {
     return (
       <div
-        ref={containerRef}
         style={{
           padding: '12px 16px',
           marginBottom: '16px',
@@ -104,37 +159,111 @@ function DocItemToolbar() {
   }
 
   if (!isReady) {
-    return <div ref={containerRef} style={{ padding: '12px', color: '#888' }}>Loading AI features...</div>;
+    return (
+      <div style={{ padding: '12px', color: '#888' }}>
+        Loading AI features...
+      </div>
+    );
   }
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        padding: '12px 16px',
-        marginBottom: '16px',
-        backgroundColor: '#d4edda',
-        borderRadius: '8px',
-        border: '1px solid #28a745',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-      }}
-    >
-      <span style={{ marginRight: '10px', color: '#155724', fontWeight: 500 }}>
-        AI Features:
-      </span>
-      <PersonalizeButton
-        chapterSlug={chapterSlug}
-        originalContent={originalContent}
-        onContentChange={handleContentChange}
-      />
-      <TranslateButton
-        chapterSlug={chapterSlug}
-        originalContent={originalContent}
-        onContentChange={handleContentChange}
-      />
-    </div>
+    <>
+      <div
+        style={{
+          padding: '12px 16px',
+          marginBottom: '16px',
+          backgroundColor: '#d4edda',
+          borderRadius: '8px',
+          border: '1px solid #28a745',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <span style={{ marginRight: '10px', color: '#155724', fontWeight: 500 }}>
+          AI Features:
+        </span>
+        <PersonalizeButton
+          chapterSlug={chapterSlug}
+          originalContent={originalContent}
+          onContentChange={handleContentChange}
+          isShowingTransformed={transformedContent !== null}
+        />
+        <TranslateButton
+          chapterSlug={chapterSlug}
+          originalContent={originalContent}
+          onContentChange={handleContentChange}
+          isShowingTransformed={transformedContent !== null}
+        />
+      </div>
+      <ContentOverlay content={transformedContent} onClose={handleCloseOverlay} />
+    </>
+  );
+}
+
+// Creates a portal container at the top of doc content and renders toolbar into it
+function ToolbarPortal() {
+  const location = useLocation();
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    // Reset on page change
+    setPortalContainer(null);
+
+    const setupPortal = () => {
+      // Check if portal container already exists
+      let container = document.getElementById('ai-toolbar-portal');
+      if (container) {
+        setPortalContainer(container);
+        return;
+      }
+
+      // Find the markdown content area
+      const selectors = [
+        '.theme-doc-markdown',
+        '[class*="docItemContent"]',
+        '.markdown',
+        'article',
+      ];
+
+      for (const selector of selectors) {
+        const target = document.querySelector(selector);
+        if (target) {
+          // Create portal container
+          container = document.createElement('div');
+          container.id = 'ai-toolbar-portal';
+          // Insert at the very beginning of the content
+          target.insertBefore(container, target.firstChild);
+          setPortalContainer(container);
+          break;
+        }
+      }
+    };
+
+    // Try immediately and with delays
+    setupPortal();
+    const timer1 = setTimeout(setupPortal, 100);
+    const timer2 = setTimeout(setupPortal, 300);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      // Clean up portal container on unmount
+      const container = document.getElementById('ai-toolbar-portal');
+      if (container) {
+        container.remove();
+      }
+    };
+  }, [location.pathname]);
+
+  if (!portalContainer) return null;
+
+  return ReactDOM.createPortal(
+    <div style={{ marginBottom: '20px' }}>
+      <DocItemToolbar />
+    </div>,
+    portalContainer
   );
 }
 
@@ -142,10 +271,10 @@ export default function LayoutWrapper(props: Props): ReactNode {
   return (
     <>
       <Layout {...props} />
-      <BrowserOnly>
-        {() => <DocItemToolbar />}
+      <BrowserOnly fallback={null}>
+        {() => <ToolbarPortal />}
       </BrowserOnly>
-      <BrowserOnly>
+      <BrowserOnly fallback={null}>
         {() => <ChatWidget />}
       </BrowserOnly>
     </>

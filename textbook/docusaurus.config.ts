@@ -18,12 +18,12 @@ const config: Config = {
   url: 'https://YOUR_GITHUB_USERNAME.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/YOUR_REPO_NAME/',
+  baseUrl: '',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'Jawad-Chaudhary', // Usually your GitHub org/user name.
-  projectName: 'YOUR_REPO_NAME', // Usually your repo name.
+  projectName: 'Hackathon-I--Physical-AI-Robotics-Textbook', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -44,7 +44,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/Jawad-Chaudhary/Hackathon-I--Physical-AI-Robotics-Textbook',
         },
         blog: false,
         theme: {
@@ -56,7 +56,7 @@ const config: Config = {
 
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'img/favicon.ico',
     colorMode: {
       respectPrefersColorScheme: true,
     },
@@ -64,7 +64,7 @@ const config: Config = {
       title: 'Physical AI Textbook',
       logo: {
         alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        src: 'img/favicon.ico',
       },
       items: [
         {
@@ -74,7 +74,7 @@ const config: Config = {
           label: 'Textbook',
         },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/Jawad-Chaudhary/Hackathon-I--Physical-AI-Robotics-Textbook',
           label: 'GitHub',
           position: 'right',
         },
@@ -107,16 +107,16 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'LinkedIn',
+              href: 'https://www.linkedin.com/in/muhammad-jawad-ullah-12a679257/',
             },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              href: 'https://discord.com/users/1279016928282673164',
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'Github',
+              href: 'https://github.com/Jawad-Chaudhary',
             },
           ],
         },

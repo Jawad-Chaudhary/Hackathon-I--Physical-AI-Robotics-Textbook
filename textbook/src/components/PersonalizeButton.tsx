@@ -4,13 +4,15 @@ import { useSkills } from '../hooks/useSkills';
 interface PersonalizeButtonProps {
   chapterSlug: string;
   originalContent: string;
-  onContentChange: (content: string) => void;
+  onContentChange: (content: string | null) => void;
+  isShowingTransformed?: boolean;
 }
 
 export function PersonalizeButton({
   chapterSlug,
   originalContent,
   onContentChange,
+  isShowingTransformed = false,
 }: PersonalizeButtonProps) {
   const [isPersonalized, setIsPersonalized] = useState(false);
   const [personalizedContent, setPersonalizedContent] = useState<string | null>(null);
@@ -20,10 +22,16 @@ export function PersonalizeButton({
   const handleClick = async () => {
     setLocalError(null);
 
-    if (isPersonalized) {
-      // Show original
-      onContentChange(originalContent);
+    // If any transformed content is showing, close it first
+    if (isShowingTransformed) {
+      onContentChange(null);
       setIsPersonalized(false);
+      return;
+    }
+
+    if (isPersonalized && personalizedContent) {
+      // Toggle: show personalized content again
+      onContentChange(personalizedContent);
     } else {
       // Personalize
       if (personalizedContent) {
@@ -51,14 +59,22 @@ export function PersonalizeButton({
     }
   };
 
+  const buttonText = isLoading
+    ? 'Personalizing...'
+    : isShowingTransformed
+    ? 'Show Original'
+    : personalizedContent
+    ? 'Personalize ✓'
+    : 'Personalize';
+
   return (
     <button
       onClick={handleClick}
       disabled={isLoading}
       className="personalize-button"
-      title={localError || undefined}
+      title={localError || (personalizedContent ? 'Click to show personalized version' : undefined)}
       style={{
-        backgroundColor: localError ? '#dc3545' : isPersonalized ? '#6c757d' : '#0d6efd',
+        backgroundColor: localError ? '#dc3545' : isShowingTransformed ? '#6c757d' : '#0d6efd',
         color: 'white',
         border: 'none',
         borderRadius: '6px',
@@ -70,7 +86,7 @@ export function PersonalizeButton({
         transition: 'all 0.2s ease',
       }}
     >
-      {isLoading ? 'Personalizing...' : isPersonalized ? 'Show Original' : 'Personalize'}
+      {buttonText}
     </button>
   );
 }
