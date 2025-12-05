@@ -40,10 +40,10 @@ A comprehensive, step-by-step guide to deploy the Smart Textbook Platform using 
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │   ┌──────────────┐         ┌──────────────┐         ┌──────────────┐       │
-│   │   VERCEL     │         │   RENDER     │         │   RENDER     │       │
+│   │   VERCEL     │         │   RAILWAY    │         │   RAILWAY    │       │
 │   │  (Frontend)  │────────▶│ (Auth Server)│────────▶│  (Backend)   │       │
 │   │  Docusaurus  │         │   Node.js    │         │   FastAPI    │       │
-│   │    FREE      │         │    FREE      │         │    FREE      │       │
+│   │    FREE      │         │  $5 credit   │         │  + Skills    │       │
 │   └──────────────┘         └──────────────┘         └──────────────┘       │
 │          │                        │                        │                │
 │          │                        │                        │                │
@@ -68,8 +68,8 @@ A comprehensive, step-by-step guide to deploy the Smart Textbook Platform using 
 | Service | Purpose | Platform | Free Tier Limits |
 |---------|---------|----------|------------------|
 | Frontend | Docusaurus site | Vercel | Unlimited bandwidth |
-| Auth Server | User authentication | Render | 750 hrs/month |
-| Backend | API + AI skills | Render | 750 hrs/month |
+| Auth Server | User authentication | Railway | $5 free credit/month |
+| Backend + Skills | API + AI skills | Railway | $5 free credit/month |
 | Database | User data | Neon | 0.5 GB storage |
 | Vector Store | Embeddings | Qdrant Cloud | 1 GB storage |
 | AI | Content generation | OpenAI/Gemini | Pay-as-you-go |
@@ -103,7 +103,7 @@ git --version
 - [ ] **Qdrant Cloud** - [cloud.qdrant.io](https://cloud.qdrant.io) - Vector database
 - [ ] **OpenAI** - [platform.openai.com](https://platform.openai.com) - AI API
 - [ ] **Google AI Studio** - [aistudio.google.com](https://aistudio.google.com) - Gemini API
-- [ ] **Render** - [render.com](https://render.com) - Backend hosting
+- [ ] **Railway** - [railway.app](https://railway.app) - Backend hosting ($5 free/month)
 - [ ] **Vercel** - [vercel.com](https://vercel.com) - Frontend hosting
 
 ---
@@ -479,7 +479,7 @@ Browser should automatically open to `http://localhost:3000`
 
 1. Go to [github.com/new](https://github.com/new)
 2. Repository name: `smart-textbook-platform`
-3. Keep it **Public** (required for free Vercel/Render)
+3. Keep it **Public** (or Private - Railway/Vercel support both)
 4. **Don't** initialize with README (we have code)
 5. Click **"Create repository"**
 
@@ -511,89 +511,113 @@ git push -u origin main
 1. Go to your GitHub repository
 2. Verify all folders are present:
    - `auth-server/`
-   - `backend/`
+   - `backend/` (includes `backend/skills/`)
    - `textbook/`
-   - `skills/`
 
 ---
 
-### Step 3.2: Deploy Auth Server to Render
+### Step 3.2: Deploy Auth Server to Railway
 
-#### 3.2.1 Create Render Account
+Railway offers $5 free credits/month (no credit card required for hobby plan).
 
-1. Go to [render.com](https://render.com)
-2. Click **"Get Started for Free"**
-3. Sign up with **GitHub** (recommended for easy repo access)
+#### 3.2.1 Create Railway Account
 
-#### 3.2.2 Create Web Service
+1. Go to [railway.app](https://railway.app)
+2. Click **"Login"** → **"Login with GitHub"**
+3. Authorize Railway to access your GitHub
 
-1. Click **"New +"** → **"Web Service"**
-2. Connect your GitHub repository:
-   - Click **"Connect account"** if not connected
-   - Select `smart-textbook-platform` repository
-3. Configure service:
+#### 3.2.2 Create New Project
 
-| Setting | Value |
-|---------|-------|
-| **Name** | `textbook-auth` |
-| **Region** | `Oregon (US West)` or closest to you |
-| **Branch** | `main` |
-| **Root Directory** | `auth-server` |
-| **Runtime** | `Node` |
-| **Build Command** | `npm install && npm run build` |
-| **Start Command** | `npm start` |
-| **Instance Type** | `Free` |
+1. Click **"New Project"**
+2. Select **"Deploy from GitHub repo"**
+3. Select your `smart-textbook-platform` repository
+4. Click **"Add variables"** (don't deploy yet!)
 
-#### 3.2.3 Add Environment Variables
+#### 3.2.3 Configure Auth Server Service
 
-Scroll down to **"Environment Variables"** section. Click **"Add Environment Variable"** for each:
-
-| Key | Value |
-|-----|-------|
-| `DATABASE_URL` | Your Neon connection string |
-| `AUTH_PORT` | `10000` |
-| `BETTER_AUTH_SECRET` | Your secret key (32+ chars) |
-| `NODE_ENV` | `production` |
-
-#### 3.2.4 Deploy
-
-1. Click **"Create Web Service"**
-2. Wait for deployment (5-10 minutes)
-3. Watch the logs for errors
-4. Once deployed, note your URL: `https://textbook-auth.onrender.com`
-
-#### 3.2.5 Run Database Migration
-
-1. In Render dashboard, go to your auth service
-2. Click **"Shell"** tab
-3. Run:
-   ```bash
-   npm run db:migrate
-   ```
-4. Should see: `Migration complete`
-
----
-
-### Step 3.3: Deploy Backend to Render
-
-#### 3.3.1 Create Another Web Service
-
-1. Click **"New +"** → **"Web Service"**
-2. Select same GitHub repository
+1. Click on the created service
+2. Go to **"Settings"** tab
 3. Configure:
 
 | Setting | Value |
 |---------|-------|
-| **Name** | `textbook-backend` |
-| **Region** | Same as auth server |
-| **Branch** | `main` |
-| **Root Directory** | `backend` |
-| **Runtime** | `Python 3` |
+| **Service Name** | `auth-server` |
+| **Root Directory** | `/auth-server` |
+| **Build Command** | `npm install && npm run build` |
+| **Start Command** | `npm start` |
+
+#### 3.2.4 Add Environment Variables
+
+Go to **"Variables"** tab and add:
+
+| Key | Value |
+|-----|-------|
+| `DATABASE_URL` | Your Neon connection string |
+| `AUTH_PORT` | `${{PORT}}` (Railway auto-assigns) |
+| `BETTER_AUTH_SECRET` | Your secret key (32+ chars) |
+| `NODE_ENV` | `production` |
+| `CORS_ORIGIN` | `https://your-app.vercel.app` (update after Vercel deploy) |
+
+#### 3.2.5 Generate Domain
+
+1. Go to **"Settings"** → **"Networking"**
+2. Click **"Generate Domain"**
+3. Note your URL: `https://auth-server-production-xxxx.up.railway.app`
+
+#### 3.2.6 Deploy
+
+1. Railway auto-deploys on push, or click **"Deploy"**
+2. Wait for deployment (2-5 minutes)
+3. Check **"Deployments"** tab for logs
+
+#### 3.2.7 Run Database Migration
+
+1. Go to **"Settings"** tab
+2. Find **"Railway Shell"** or use Railway CLI:
+   ```bash
+   # Install Railway CLI
+   npm install -g @railway/cli
+
+   # Login
+   railway login
+
+   # Link to project
+   railway link
+
+   # Run migration
+   railway run npm run db:migrate
+   ```
+3. Or add migration to build command:
+   ```
+   npm install && npm run build && npm run db:migrate
+   ```
+
+---
+
+### Step 3.3: Deploy Backend to Railway
+
+#### 3.3.1 Add Another Service
+
+1. In the same Railway project, click **"New"** → **"GitHub Repo"**
+2. Select the same repository again
+3. This creates a second service
+
+#### 3.3.2 Configure Backend Service
+
+Go to **"Settings"** tab:
+
+| Setting | Value |
+|---------|-------|
+| **Service Name** | `backend` |
+| **Root Directory** | `/backend` |
 | **Build Command** | `pip install -r requirements.txt` |
 | **Start Command** | `uvicorn main:app --host 0.0.0.0 --port $PORT` |
-| **Instance Type** | `Free` |
 
-#### 3.3.2 Add Environment Variables
+> **Note**: Skills are now inside `backend/skills/`, so no special path configuration needed.
+
+#### 3.3.3 Add Environment Variables
+
+Go to **"Variables"** tab:
 
 | Key | Value |
 |-----|-------|
@@ -603,21 +627,56 @@ Scroll down to **"Environment Variables"** section. Click **"Add Environment Var
 | `OPENAI_API_KEY` | Your OpenAI API key |
 | `GEMINI_API_KEY` | Your Gemini API key |
 | `JWT_SECRET_KEY` | Same as BETTER_AUTH_SECRET |
-| `AUTH_SERVER_URL` | `https://textbook-auth.onrender.com` |
-| `PYTHON_VERSION` | `3.11.0` |
+| `AUTH_SERVER_URL` | `https://auth-server-production-xxxx.up.railway.app` |
+| `PYTHON_VERSION` | `3.11` |
+| `NIXPACKS_PYTHON_VERSION` | `3.11` |
 
-#### 3.3.3 Deploy
+#### 3.3.4 Generate Domain
 
-1. Click **"Create Web Service"**
-2. Wait for deployment (5-10 minutes)
-3. Note your URL: `https://textbook-backend.onrender.com`
+1. Go to **"Settings"** → **"Networking"**
+2. Click **"Generate Domain"**
+3. Note your URL: `https://backend-production-xxxx.up.railway.app`
 
-#### 3.3.4 Verify Backend
+#### 3.3.5 Deploy & Verify
 
 ```bash
-curl https://textbook-backend.onrender.com/
+curl https://backend-production-xxxx.up.railway.app/
 # Expected: {"message":"Smart Textbook API",...}
 ```
+
+---
+
+### About the Skills Folder
+
+The `backend/skills/` folder contains Python CLI scripts that the backend invokes via `subprocess`:
+
+```
+backend/skills/
+├── __init__.py          # Package marker
+├── quiz_agent.py        # Generates 5-question quizzes
+├── translator_agent.py  # Translates content to Urdu
+└── personalize_agent.py # Personalizes content based on user profile
+```
+
+**How it works:**
+```python
+# In backend/services/skill_runner.py
+# Uses __file__ for reliable path resolution
+BACKEND_DIR = Path(__file__).resolve().parent.parent  # backend/
+SKILLS_DIR = BACKEND_DIR / "skills"
+
+result = subprocess.run(
+    [sys.executable, str(SKILLS_DIR / 'quiz_agent.py')],
+    input=markdown_content,
+    capture_output=True
+)
+```
+
+**Deployment Strategy:**
+- Skills are inside `backend/skills/` (same directory as backend)
+- Path resolution uses `__file__` (works in any deployment)
+- Skills are NOT a separate service - they run as subprocesses within backend
+- No special Railway configuration needed
 
 ---
 
@@ -650,14 +709,24 @@ Click **"Environment Variables"** and add:
 
 | Key | Value |
 |-----|-------|
-| `NEXT_PUBLIC_AUTH_URL` | `https://textbook-auth.onrender.com` |
-| `NEXT_PUBLIC_API_URL` | `https://textbook-backend.onrender.com` |
+| `NEXT_PUBLIC_AUTH_URL` | `https://auth-server-production-xxxx.up.railway.app` |
+| `NEXT_PUBLIC_API_URL` | `https://backend-production-xxxx.up.railway.app` |
+
+> Replace `xxxx` with your actual Railway service URLs from Steps 3.2.5 and 3.3.4
 
 #### 3.4.4 Deploy
 
 1. Click **"Deploy"**
 2. Wait for build (2-5 minutes)
 3. Your site is live at: `https://smart-textbook.vercel.app`
+
+#### 3.4.5 Update Railway CORS
+
+After Vercel deployment, go back to Railway and update the auth-server's `CORS_ORIGIN`:
+
+| Key | Value |
+|-----|-------|
+| `CORS_ORIGIN` | `https://smart-textbook.vercel.app` |
 
 ---
 
@@ -673,8 +742,8 @@ Edit `textbook/src/hooks/useAuth.ts`:
 // Find this line:
 const AUTH_URL = 'http://localhost:3001';
 
-// Change to:
-const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || 'https://textbook-auth.onrender.com';
+// Change to (use your Railway URL):
+const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || 'https://auth-server-production-xxxx.up.railway.app';
 ```
 
 Edit `textbook/src/hooks/useSkills.ts`:
@@ -683,8 +752,8 @@ Edit `textbook/src/hooks/useSkills.ts`:
 // Find this line:
 const API_URL = 'http://localhost:8000';
 
-// Change to:
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://textbook-backend.onrender.com';
+// Change to (use your Railway URL):
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-production-xxxx.up.railway.app';
 ```
 
 Edit `textbook/src/hooks/useChat.ts`:
@@ -693,8 +762,8 @@ Edit `textbook/src/hooks/useChat.ts`:
 // Find this line:
 const API_URL = 'http://localhost:8000';
 
-// Change to:
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://textbook-backend.onrender.com';
+// Change to (use your Railway URL):
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-production-xxxx.up.railway.app';
 ```
 
 #### 3.5.2 Update Backend CORS
@@ -723,50 +792,53 @@ git commit -m "Configure production URLs"
 git push origin main
 ```
 
-Vercel and Render will automatically redeploy.
+Vercel and Railway will automatically redeploy.
 
 ---
 
 ## Part 4: Post-Deployment Configuration
 
-### 4.1 Update Render Environment Variables
+### 4.1 Verify Railway Environment Variables
 
-Go to Render dashboard and update both services:
+Go to Railway dashboard and verify both services have all required variables:
 
-**Auth Server** - Add CORS origin:
+**Auth Server** - Verify CORS origin is set:
 | Key | Value |
 |-----|-------|
 | `CORS_ORIGIN` | `https://smart-textbook.vercel.app` |
 
-**Backend** - Already configured in Step 3.3.2
+**Backend** - Verify AUTH_SERVER_URL points to your Railway auth service
 
 ### 4.2 Verify All Services
 
-Run these checks:
+Run these checks (replace URLs with your actual Railway URLs):
 
 ```bash
 # 1. Check Auth Server
-curl https://textbook-auth.onrender.com/api/auth/session
+curl https://auth-server-production-xxxx.up.railway.app/api/auth/session
 # Expected: {"session":null}
 
 # 2. Check Backend
-curl https://textbook-backend.onrender.com/
+curl https://backend-production-xxxx.up.railway.app/
 # Expected: {"message":"Smart Textbook API",...}
 
 # 3. Check Frontend
 # Open https://smart-textbook.vercel.app in browser
 ```
 
-### 4.3 Keep Services Awake (Optional)
+### 4.3 Railway vs Render: No Sleep Issue!
 
-Render's free tier sleeps after 15 minutes of inactivity. To keep services awake:
+**Good news!** Unlike Render's free tier, Railway services **don't sleep** after inactivity. They run continuously until you exhaust your $5 monthly credit.
 
+**Estimated usage for this project:**
+- Auth server: ~$1-2/month (low CPU usage)
+- Backend: ~$2-3/month (occasional AI processing)
+- **Total: ~$3-5/month** (within free credit!)
+
+If you need monitoring anyway:
 1. Go to [uptimerobot.com](https://uptimerobot.com) (free)
 2. Create account
-3. Add monitors:
-   - **Auth**: `https://textbook-auth.onrender.com/api/auth/session`
-   - **Backend**: `https://textbook-backend.onrender.com/`
-4. Set interval: **5 minutes**
+3. Add monitors for health checks
 
 ---
 
@@ -790,16 +862,16 @@ Open your Vercel URL (e.g., `https://smart-textbook.vercel.app`):
 ### API Testing
 
 ```bash
-# Test signup
-curl -X POST https://textbook-auth.onrender.com/api/auth/sign-up/email \
+# Test signup (replace with your Railway URL)
+curl -X POST https://auth-server-production-xxxx.up.railway.app/api/auth/sign-up/email \
   -H "Content-Type: application/json" \
   -d '{"email":"prod-test@example.com","password":"TestPass123!","name":"Test User"}'
 
-# Test backend health
-curl https://textbook-backend.onrender.com/health
+# Test backend health (replace with your Railway URL)
+curl https://backend-production-xxxx.up.railway.app/health
 
 # Test chat (requires valid token)
-curl -X POST https://textbook-backend.onrender.com/chat \
+curl -X POST https://backend-production-xxxx.up.railway.app/chat \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_TOKEN" \
   -d '{"message":"What is ROS 2?"}'
@@ -811,12 +883,13 @@ curl -X POST https://textbook-backend.onrender.com/chat \
 
 ### Issue: "Service Unavailable" or Slow Response
 
-**Cause**: Render free tier sleeps after 15 minutes of inactivity.
+**Cause**: Railway service may be restarting or experiencing issues.
 
 **Solution**:
-1. Wait 30 seconds and refresh
-2. Set up UptimeRobot (see Step 4.3)
-3. Or upgrade to Render paid tier ($7/month)
+1. Check Railway dashboard for deployment status
+2. Check **"Deployments"** tab for error logs
+3. Verify environment variables are set correctly
+4. Check if you've exceeded $5 monthly credit
 
 ---
 
@@ -887,14 +960,40 @@ curl -X POST https://textbook-backend.onrender.com/chat \
 
 ---
 
-### Issue: "Module Not Found" on Render (Python)
+### Issue: "Module Not Found" on Railway (Python)
 
 **Cause**: Missing dependency in `requirements.txt`.
 
 **Solution**:
-1. Check Render build logs for missing module
+1. Check Railway build logs for missing module
 2. Add to `backend/requirements.txt`
 3. Commit and push to trigger redeploy
+
+---
+
+### Issue: Skills/Subprocess Not Working on Railway
+
+**Cause**: Subprocess can't find skills folder.
+
+**Solution**:
+1. Verify `backend/skills/` folder exists with all 3 Python files
+2. Check Railway logs for the exact path error
+3. Ensure `skill_runner.py` uses `Path(__file__).resolve()` for path resolution
+4. Verify the skill scripts have correct permissions (should be executable)
+
+---
+
+### Issue: Railway Build Fails
+
+**Cause**: Nixpacks (Railway's builder) can't detect the right runtime.
+
+**Solution**:
+1. Add `NIXPACKS_PYTHON_VERSION=3.11` to environment variables
+2. For Node.js, add `engines` field to `package.json`:
+   ```json
+   "engines": { "node": ">=20.0" }
+   ```
+3. Check build logs for specific errors
 
 ---
 
@@ -916,7 +1015,7 @@ curl -X POST https://textbook-backend.onrender.com/chat \
 | Service | Free Limit | Est. Monthly Usage |
 |---------|------------|-------------------|
 | **Vercel** | 100 GB bandwidth | Well under limit |
-| **Render** | 750 hours/month | ~360 hrs (1 service always on) |
+| **Railway** | $5 credit/month | ~$3-5 (both services) |
 | **Neon** | 0.5 GB storage | ~100 MB (users table) |
 | **Qdrant** | 1 GB storage | ~500 MB (embeddings) |
 | **OpenAI** | Pay-as-you-go | ~$1-5/month for light use |
@@ -926,9 +1025,16 @@ curl -X POST https://textbook-backend.onrender.com/chat \
 
 | Scenario | Cost |
 |----------|------|
-| **Development/Testing** | $0 |
-| **Light Production** (100 users) | $1-3 |
-| **Medium Production** (1000 users) | $5-15 |
+| **Development/Testing** | $0-5 (within Railway credit) |
+| **Light Production** (100 users) | $3-8 |
+| **Medium Production** (1000 users) | $10-20 |
+
+### Railway Pricing Notes
+
+- **$5 free credit** per month (no credit card required)
+- Services run 24/7 (no sleeping like Render)
+- Usage-based billing after free credit
+- Add credit card for overage protection
 
 ### Tips to Minimize Costs
 
@@ -936,7 +1042,7 @@ curl -X POST https://textbook-backend.onrender.com/chat \
 2. **Cache AI responses** in Qdrant to avoid repeated calls
 3. **Use GPT-4o-mini** instead of GPT-4 (10x cheaper)
 4. **Set OpenAI usage limits** to avoid surprises
-5. **Use UptimeRobot** to keep free tiers awake
+5. **Monitor Railway usage** in dashboard to stay within $5 credit
 
 ---
 
@@ -955,8 +1061,8 @@ curl -X POST https://textbook-backend.onrender.com/chat \
 | Service | URL |
 |---------|-----|
 | Frontend | https://smart-textbook.vercel.app |
-| Auth Server | https://textbook-auth.onrender.com |
-| Backend | https://textbook-backend.onrender.com |
+| Auth Server | https://auth-server-production-xxxx.up.railway.app |
+| Backend | https://backend-production-xxxx.up.railway.app |
 | Database | (Neon connection string) |
 | Vector DB | (Qdrant cluster URL) |
 
@@ -965,10 +1071,10 @@ curl -X POST https://textbook-backend.onrender.com/chat \
 ## Need Help?
 
 1. Check the [README.md](./README.md) for project overview
-2. Review error logs in Render/Vercel dashboards
+2. Review error logs in Railway/Vercel dashboards
 3. Open an issue on [GitHub](https://github.com/YOUR_USERNAME/smart-textbook-platform/issues)
 4. Check service status pages:
-   - [Render Status](https://status.render.com)
+   - [Railway Status](https://status.railway.app)
    - [Vercel Status](https://www.vercel-status.com)
    - [Neon Status](https://status.neon.tech)
 
