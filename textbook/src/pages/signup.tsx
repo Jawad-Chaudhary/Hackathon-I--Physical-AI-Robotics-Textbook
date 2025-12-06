@@ -143,8 +143,8 @@ export default function SignupPage(): JSX.Element {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={6}
-                placeholder="At least 6 characters"
+                minLength={8}
+                placeholder="At least 8 characters"
                 style={{
                   width: '100%',
                   padding: '12px 16px',

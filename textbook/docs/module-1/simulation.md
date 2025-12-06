@@ -461,6 +461,7 @@ B) Rapid iteration and parallel testing
 C) Reproducible environments and no risk of damaging hardware
 D) All of the above
 **Answer**: D) All of the above
+:::
 
 :::note Question 2
 What is Gazebo used for in robotics?
@@ -469,6 +470,7 @@ B) It's a tool for rendering robot visualization
 C) It's a sensor simulator (cameras, LiDAR, IMU)
 D) All of the above
 **Answer**: D) All of the above
+:::
 
 :::note Question 3
 In the context of Gazebo robotic simulation, what is the purpose of a launch file?
@@ -477,6 +479,7 @@ B) To create a new robot model in Gazebo
 C) To start the Gazebo simulator and spawn the robot entity in the simulated world
 D) To close the Gazebo simulator
 **Answer**: C) To start the Gazebo simulator and spawn the robot entity in the simulated world
+:::
 
 :::note Question 4
 What can be done when a simulated robot falls through the ground in Gazebo?
@@ -485,6 +488,7 @@ B) Verify inertial properties
 C) Ensure ground plane is static
 D) All of the above
 **Answer**: D) All of the above
+:::
 
 :::note Question 5
 What are some best practices in Gazebo simulation?
@@ -493,3 +497,4 @@ B) Use unrealistic physics parameters
 C) Keep SDF/URDF files in Git for version control
 D) Avoid using namespaces to prevent topic name conflicts
 **Answer**: C) Keep SDF/URDF files in Git for version control
+:::

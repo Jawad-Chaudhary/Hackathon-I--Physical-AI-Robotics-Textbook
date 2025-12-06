@@ -390,6 +390,7 @@ B) A* does not use a heuristic, unlike Dijkstra's algorithm
 C) Dijkstra's algorithm only works in grid-based environments, A* does not
 D) A* only works in grid-based environments, Dijkstra's algorithm does not
 **Answer**: A
+:::
 
 :::note Question 2
 In the RRT (Rapidly-exploring Random Tree) algorithm, what is the purpose of the 'goal bias'?
@@ -398,6 +399,7 @@ B) It ensures the tree grows randomly more often than towards the goal
 C) It helps in avoiding obstacles
 D) It helps in maintaining the balance of the tree
 **Answer**: A
+:::
 
 :::note Question 3
 What is the purpose of the Dynamic Window Approach (DWA) in path planning?
@@ -406,6 +408,7 @@ B) It is used to evaluate the trajectory
 C) It is used to calculate optimal velocity command considering dynamic constraints
 D) It is used to check for trajectory collisions with obstacles
 **Answer**: C
+:::
 
 :::note Question 4
 In the ROS 2 Path Planning code, what does the 'world_to_grid' function do?
@@ -414,6 +417,7 @@ B) It converts the coordinates of the robot's position from world coordinates to
 C) It converts the coordinates of the obstacles from world coordinates to grid coordinates
 D) It converts the coordinates of the obstacles from grid coordinates to world coordinates
 **Answer**: B
+:::
 
 :::note Question 5
 What is the primary challenge in the Path Planning Problem?
@@ -422,3 +426,4 @@ B) Finding a path connecting start to goal, avoiding obstacles
 C) Defining the start and goal configurations
 D) Defining the map with obstacles
 **Answer**: B
+:::

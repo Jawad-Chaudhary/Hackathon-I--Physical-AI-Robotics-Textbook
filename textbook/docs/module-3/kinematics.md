@@ -256,6 +256,7 @@ B) The calculation of joint angles to reach a desired position
 C) The study of motion without considering the forces that cause it
 D) The calculation of end-effector position from joint angles
 **Answer**: C)
+:::
 
 :::note Question 2
 What are the Denavit-Hartenberg (DH) Parameters used for in robot kinematics?
@@ -264,6 +265,7 @@ B) Describing the robot's links and joint angles
 C) Describing the robot's speed and acceleration
 D) Describing the robot's motion in a three-dimensional space
 **Answer**: B)
+:::
 
 :::note Question 3
 What does the Jacobian matrix relate in robot kinematics?
@@ -272,6 +274,7 @@ B) Joint angles to end-effector position
 C) End-effector position to joint angles
 D) Joint forces to end-effector forces
 **Answer**: A)
+:::
 
 :::note Question 4
 What is the problem of singularities in robot kinematics?
@@ -280,6 +283,7 @@ B) It causes the Jacobian to lose rank, leading to loss of degrees of freedom an
 C) It causes the robot to stop moving
 D) It causes the robot's power consumption to increase
 **Answer**: B)
+:::
 
 :::note Question 5
 What is the purpose of using libraries like MoveIt 2 in modern robots?
@@ -288,3 +292,4 @@ B) To increase the robot's processing speed
 C) To reduce the robot's power consumption
 D) To enable the robot to move in a three-dimensional space
 **Answer**: A)
+:::

@@ -345,6 +345,7 @@ B) Sensors and actuators both provide input.
 C) Sensors and actuators both provide output.
 D) Actuators provide input, and sensors provide output.
 **Answer**: A
+:::
 
 :::note Question 2
 What is the purpose of the cv_bridge in ROS 2?
@@ -353,6 +354,7 @@ B) To convert between ROS Image messages and Python format.
 C) To convert between ROS Image messages and JavaScript format.
 D) To convert between ROS Image messages and C++ format.
 **Answer**: A
+:::
 
 :::note Question 3
 What is the function of the `Twist` message in controlling a differential drive robot?
@@ -361,6 +363,7 @@ B) It controls the robot's motion by setting the robot's color.
 C) It controls the robot's motion by setting the robot's size.
 D) It controls the robot's motion by resetting the robot's position.
 **Answer**: A
+:::
 
 :::note Question 4
 What is the function of the `imu_processor` node in the presented ROS 2 code?
@@ -369,6 +372,7 @@ B) It processes orientation and acceleration data from an IMU.
 C) It processes distance data from a LiDAR.
 D) It processes ultrasonic signals from a proximity sensor.
 **Answer**: B
+:::
 
 :::note Question 5
 What is the obstacle avoidance example node in the text doing?
@@ -377,3 +381,4 @@ B) It reads temperature data, processes to detect high temperatures, and command
 C) It reads sound data, processes to detect loud noises, and commands the robot to move away.
 D) It reads light data, processes to detect darkness, and commands the robot to turn on its lights.
 **Answer**: A
+:::

@@ -361,6 +361,7 @@ B) Only grayscale information
 C) Grayscale, color (RGB), and depth information
 D) Only depth information
 **Answer**: C) Grayscale, color (RGB), and depth information
+:::
 
 :::note Question 2
 Which of the following is not a method for image filtering in OpenCV?
@@ -369,6 +370,7 @@ B) Median blur
 C) Bilateral filter
 D) Radial filter
 **Answer**: D) Radial filter
+:::
 
 :::note Question 3
 What is the purpose of the Sobel Operator in image processing?
@@ -377,6 +379,7 @@ B) To detect edges in an image by calculating the gradient
 C) To blur an image for noise reduction
 D) To perform color-based segmentation
 **Answer**: B) To detect edges in an image by calculating the gradient
+:::
 
 :::note Question 4
 In the context of image processing, what does the term "Morphological Operations" refer to?
@@ -385,6 +388,7 @@ B) Operations that analyze and detect features in an image
 C) Operations that manipulate the shape or structure of objects within an image
 D) Operations that transform an image's histogram
 **Answer**: C) Operations that manipulate the shape or structure of objects within an image
+:::
 
 :::note Question 5
 What is a key advantage of using GPU Acceleration with CUDA in image processing?
@@ -393,3 +397,4 @@ B) It improves contrast in images
 C) It speeds up processing by performing operations on the GPU
 D) It allows for more accurate edge detection
 **Answer**: C) It speeds up processing by performing operations on the GPU
+:::

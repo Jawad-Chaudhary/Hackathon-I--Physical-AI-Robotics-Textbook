@@ -309,6 +309,7 @@ B) Obstacle avoidance
 C) Localization
 D) All of the above
 **Answer**: D) All of the above
+:::
 
 :::note Question 2
 How does Nav2 represent the environment for planning and obstacle avoidance?
@@ -317,6 +318,7 @@ B) With planners
 C) With controllers
 D) With behavior trees
 **Answer**: A) With costmaps
+:::
 
 :::note Question 3
 What is the purpose of planners in the Nav2 architecture?
@@ -325,6 +327,7 @@ B) They compute global paths using algorithms like A* or NavFn
 C) They execute paths while avoiding dynamic obstacles
 D) They provide probabilistic localization on a known map
 **Answer**: B) They compute global paths using algorithms like A* or NavFn
+:::
 
 :::note Question 4
 What is the role of behavior trees in Nav2?
@@ -333,6 +336,7 @@ B) They compute global paths using algorithms like A* or NavFn
 C) They execute paths while avoiding dynamic obstacles
 D) They enable flexible, recoverable navigation logic
 **Answer**: D) They enable flexible, recoverable navigation logic
+:::
 
 :::note Question 5
 What does Adaptive Monte Carlo Localization (AMCL) provide in Nav2?
@@ -341,3 +345,4 @@ B) Obstacle avoidance
 C) Probabilistic localization on a known map
 D) Flexible, recoverable navigation logic
 **Answer**: C) Probabilistic localization on a known map
+:::

@@ -225,6 +225,7 @@ B) Synchronous communication
 C) Publish-subscribe communication
 D) Feedback-based communication
 **Answer**: B) Synchronous communication
+:::
 
 :::note Question 2
 In a ROS 2 service definition, what does the `---` separator indicate?
@@ -233,6 +234,7 @@ B) The start of the service definition
 C) The division between request fields and response fields
 D) The division between request fields and the service name
 **Answer**: C) The division between request fields and response fields
+:::
 
 :::note Question 3
 What kind of tasks are best managed by Actions in ROS 2?
@@ -241,6 +243,7 @@ B) Long-running tasks
 C) One-to-one communication tasks
 D) Continuous data streams
 **Answer**: B) Long-running tasks
+:::
 
 :::note Question 4
 In ROS 2, which communication pattern provides progress feedback and supports cancellation?
@@ -249,6 +252,7 @@ B) Services
 C) Actions
 D) None of the above
 **Answer**: C) Actions
+:::
 
 :::note Question 5
 In the context of ROS 2, when would you use a Service over an Action?
@@ -257,3 +261,4 @@ B) When you need to provide continuous data streams
 C) When you need to perform a quick operation
 D) When you need to provide progress feedback
 **Answer**: C) When you need to perform a quick operation
+:::

@@ -389,6 +389,7 @@ B) Only grasping and navigation
 C) Only obstacle avoidance and navigation
 D) None of these
 **Answer**: A
+:::
 
 :::note Question 2
 Which depth sensing technology works outdoors and requires good lighting?
@@ -397,6 +398,7 @@ B) Structured Light
 C) LiDAR
 D) Stereo Vision
 **Answer**: D
+:::
 
 :::note Question 3
 What is the purpose of downsampling in point cloud processing?
@@ -405,6 +407,7 @@ B) Preserve structure
 C) Reduce point cloud size while preserving structure
 D) None of these
 **Answer**: C
+:::
 
 :::note Question 4
 What does the function `get_bounding_boxes(point_cloud, labels)` return?
@@ -413,6 +416,7 @@ B) Raw sensor data
 C) An array of depth images
 D) A 3D model of the environment
 **Answer**: A
+:::
 
 :::note Question 5
 What does the depth completion process aim to do?
@@ -421,3 +425,4 @@ B) Fill missing depth values in a depth image
 C) Create a 3D model of the environment
 D) Generate a disparity map from stereo images
 **Answer**: B
+:::

@@ -44,6 +44,15 @@ app.options("*", cors({
 // Parse JSON bodies for custom endpoints
 app.use(express.json());
 
+// Request logging middleware for debugging
+app.use("/api/auth/*", (req, res, next) => {
+  console.log(`[AUTH] ${req.method} ${req.path}`);
+  if (req.method === "POST") {
+    console.log("[AUTH] Body:", JSON.stringify(req.body, null, 2));
+  }
+  next();
+});
+
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "healthy", service: "auth-server" });

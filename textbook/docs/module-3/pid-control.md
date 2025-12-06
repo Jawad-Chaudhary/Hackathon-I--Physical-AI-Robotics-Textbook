@@ -401,6 +401,7 @@ B) Rate of error change
 C) Proportional to current error
 D) Dampens oscillations
 **Answer**: C
+:::
 
 :::note Question 2
 What is a potential problem with the Derivative component in a PID controller?
@@ -409,6 +410,7 @@ B) Steady-state error
 C) Wind-up
 D) Slow response
 **Answer**: A
+:::
 
 :::note Question 3
 In the PID controller equation, what does the variable `e(t)` represent?
@@ -417,6 +419,7 @@ B) Integral gain
 C) Derivative gain
 D) Error
 **Answer**: D
+:::
 
 :::note Question 4
 Which of the following methods can be used for tuning PID parameters?
@@ -425,6 +428,7 @@ B) Newton's Method
 C) Euclid's Method
 D) Pythagorean Method
 **Answer**: A
+:::
 
 :::note Question 5
 What is Cascade Control in the context of PID controllers?
@@ -433,3 +437,4 @@ B) A way to reduce noise amplification.
 C) A method to prevent integral term from growing too large.
 D) A technique to manually tune PID parameters.
 **Answer**: A
+:::

@@ -413,6 +413,7 @@ B) A method for building maps and tracking robot position simultaneously
 C) A programming language for robotics
 D) A type of sensor used in robotics
 **Answer**: B
+:::
 
 :::note Question 2
 Why does SLAM matter?
@@ -421,6 +422,7 @@ B) It works as a GPS system for robots
 C) It improves the battery life of robots
 D) It makes robots move faster
 **Answer**: A
+:::
 
 :::note Question 3
 What are the components of SLAM?
@@ -429,6 +431,7 @@ B) Hardware and Software
 C) Sensors and Actuators
 D) Cameras and Microphones
 **Answer**: A
+:::
 
 :::note Question 4
 What does the Loop Closure Detection do in the context of SLAM?
@@ -437,6 +440,7 @@ B) It calculates the total distance travelled by the robot
 C) It checks if the robot has returned to its starting position
 D) It calculates the time taken for the robot to complete a loop
 **Answer**: A
+:::
 
 :::note Question 5
 What is one of the best practices in SLAM?
@@ -445,3 +449,4 @@ B) Avoiding loop closure
 C) Selecting as many keyframes as possible
 D) Balancing accuracy and speed through keyframe selection
 **Answer**: D
+:::

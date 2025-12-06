@@ -404,6 +404,7 @@ B) Classification and Segmentation
 C) Localization and Segmentation
 D) Segmentation and Detection
 **Answer**: A) Classification and Localization
+:::
 
 :::note Question 2
 In the context of object detection, what is the output of the task "Detection"?
@@ -412,6 +413,7 @@ B) Boxes and labels
 C) Pixel masks
 D) Confidence scores only
 **Answer**: B) Boxes and labels
+:::
 
 :::note Question 3
 What is the advantage of YOLO (You Only Look Once) detection architecture?
@@ -420,6 +422,7 @@ B) It can detect objects in real-time
 C) It is a two-stage detector
 D) It is the slowest among all detectors
 **Answer**: B) It can detect objects in real-time
+:::
 
 :::note Question 4
 What is Non-Maximum Suppression (NMS) used for in object detection?
@@ -428,6 +431,7 @@ B) Increasing the accuracy of detection
 C) Removing overlapping detections
 D) Classifying objects
 **Answer**: C) Removing overlapping detections
+:::
 
 :::note Question 5
 When optimizing for inference, what can be done to increase the speed of the YOLO model?
@@ -436,3 +440,4 @@ B) Decrease the image size
 C) Use a different model
 D) Increase the number of layers in the model
 **Answer**: B) Decrease the image size
+:::
