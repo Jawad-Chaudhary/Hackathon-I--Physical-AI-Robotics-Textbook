@@ -15,7 +15,7 @@ export default function SignupPage(): JSX.Element {
   // Redirect if already authenticated
   React.useEffect(() => {
     if (isAuthenticated) {
-      history.push('/docs/intro');
+      history.push('/docs');
     }
   }, [isAuthenticated, history]);
 
@@ -29,7 +29,7 @@ export default function SignupPage(): JSX.Element {
       experience_level: experienceLevel,
     });
     if (success) {
-      history.push('/docs/intro');
+      history.push('/docs');
     }
   };
 

@@ -21,7 +21,7 @@ export default function LoginPage(): JSX.Element {
     e.preventDefault();
     const success = await login({ email, password });
     if (success) {
-      history.push('/docs/intro'); // 👈 Instant SPA navigation
+      history.push('/docs'); // 👈 Instant SPA navigation
     }
   };
 
