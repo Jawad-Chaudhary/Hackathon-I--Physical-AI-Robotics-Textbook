@@ -9,9 +9,9 @@ const config: Config = {
   tagline: 'Learn Physical AI, Robotics, and ROS 2',
   favicon: 'img/favicon.ico',
   customFields: {
-    // Falls back to localhost if the env var isn't set
-    authUrl: process.env.AUTH_URL || 'http://localhost:3001', 
-    apiUrl: process.env.API_URL || 'http://localhost:8000',
+    // Production URLs - Railway deployments
+    authUrl: 'https://hackathon-i-physical-ai-robotics-textbook-production.up.railway.app',
+    apiUrl: 'https://clever-respect-production-5202.up.railway.app',
   },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future

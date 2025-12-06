@@ -11,13 +11,17 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from models.user import User, ExperienceLevel
 from config import JWT_SECRET_KEY
+import os
 
 # JWT configuration (legacy support)
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
-# Better-Auth server URL
-AUTH_SERVER_URL = "http://localhost:3001"
+# Better-Auth server URL - defaults to Railway production URL
+AUTH_SERVER_URL = os.getenv(
+    "AUTH_SERVER_URL",
+    "https://hackathon-i-physical-ai-robotics-textbook-production.up.railway.app"
+)
 
 def hash_password(password: str) -> str:
     salt = secrets.token_hex(16)

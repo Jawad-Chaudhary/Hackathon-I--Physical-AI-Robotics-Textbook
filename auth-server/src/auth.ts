@@ -56,7 +56,8 @@ export const auth = betterAuth({
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost:8000",
-    "https://hackathon-i-physical-ai-robotics-te.vercel.app/"
+    "https://hackathon-i-physical-ai-robotics-te.vercel.app",
+    "https://clever-respect-production-5202.up.railway.app"
   ],
 });
 
