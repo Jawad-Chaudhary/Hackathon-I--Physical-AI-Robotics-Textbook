@@ -13,20 +13,33 @@ import { session, user } from "./schema.js";
 import { eq } from "drizzle-orm";
 
 const app = express();
-const PORT = process.env.AUTH_PORT || 3001;
+const PORT = process.env.PORT || process.env.AUTH_PORT || 3001;
 
-// CORS configuration
+// Allowed origins for CORS
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:8000",
+  "https://hackathon-i-physical-ai-robotics-te.vercel.app",
+  "https://clever-respect-production-5202.up.railway.app"
+];
+
+// CORS configuration - must be before routes
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:8000",
-      "https://hackathon-i-physical-ai-robotics-te.vercel.app",
-      "https://clever-respect-production-5202.up.railway.app"
-    ],
+    origin: allowedOrigins,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
+
+// Handle preflight OPTIONS for all routes explicitly
+app.options("*", cors({
+  origin: allowedOrigins,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+}));
 
 // Parse JSON bodies for custom endpoints
 app.use(express.json());
@@ -36,7 +49,7 @@ app.get("/health", (req, res) => {
   res.json({ status: "healthy", service: "auth-server" });
 });
 
-// Better-Auth handles all /api/auth/* routes
+// Better-Auth handles all /api/auth/* routes (POST, GET, etc. - not OPTIONS)
 app.all("/api/auth/*", toNodeHandler(auth));
 
 // Custom endpoint to get user profile via cookies
