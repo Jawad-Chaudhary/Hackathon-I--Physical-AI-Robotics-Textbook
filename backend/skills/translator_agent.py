@@ -78,8 +78,8 @@ HTML content to translate:
 Return ONLY the translated HTML. Start directly with the first HTML tag.
 """
 
-    # Use Gemini 2.0 Flash for speed
-    model = genai.GenerativeModel('gemini-2.0-flash')
+    # Use Gemini 1.5 Flash (often has higher rate limits)
+    model = genai.GenerativeModel('gemini-1.5-flash')
     response = model.generate_content(prompt)
 
     translated = response.text
