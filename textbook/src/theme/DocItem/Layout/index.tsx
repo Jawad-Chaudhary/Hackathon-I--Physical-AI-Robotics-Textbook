@@ -33,6 +33,7 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
         bottom: 0,
         zIndex: 1000,
         backgroundColor: 'var(--ifm-background-color, #fff)',
+        color: 'var(--ifm-font-color-base, #1c1e21)',
         overflow: 'auto',
       }}
     >
