@@ -21,9 +21,16 @@ interface ContentOverlayProps {
 
 // Overlay component that renders transformed content without mutating the DOM
 function ContentOverlay({ content, onClose }: ContentOverlayProps) {
-  if (!content) return null;
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!content || !mounted) return null;
+
+  // Use portal to render overlay at document.body level for proper z-index stacking
+  return ReactDOM.createPortal(
     <div
       style={{
         position: 'fixed',
@@ -31,43 +38,61 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 1000,
-        backgroundColor: 'var(--ifm-background-color, #fff)',
-        color: 'var(--ifm-font-color-base, #1c1e21)',
+        zIndex: 9999,
+        backgroundColor: '#ffffff',
+        color: '#1c1e21',
         overflow: 'auto',
       }}
+      data-theme="light"
     >
+      {/* Dark mode support */}
+      <style>{`
+        [data-theme='dark'] .content-overlay-wrapper {
+          background-color: #1b1b1d !important;
+          color: #e3e3e3 !important;
+        }
+      `}</style>
       <div
+        className="content-overlay-wrapper"
         style={{
-          maxWidth: '800px',
-          margin: '0 auto',
-          padding: '20px',
+          minHeight: '100vh',
+          backgroundColor: 'var(--ifm-background-color, #ffffff)',
+          color: 'var(--ifm-font-color-base, #1c1e21)',
         }}
       >
-        <button
-          onClick={onClose}
+        <div
           style={{
-            position: 'sticky',
-            top: '10px',
-            float: 'right',
-            padding: '8px 16px',
-            backgroundColor: '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            zIndex: 1001,
+            maxWidth: '800px',
+            margin: '0 auto',
+            padding: '20px',
           }}
         >
-          ✕ Close & Show Original
-        </button>
-        <div
-          className="theme-doc-markdown markdown"
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+          <button
+            onClick={onClose}
+            style={{
+              position: 'sticky',
+              top: '10px',
+              float: 'right',
+              padding: '8px 16px',
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              zIndex: 10000,
+            }}
+          >
+            ✕ Close & Show Original
+          </button>
+          <div
+            className="theme-doc-markdown markdown"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
+        </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
