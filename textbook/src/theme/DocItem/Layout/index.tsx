@@ -31,6 +31,11 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
 
   // Detect current theme from document
   const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+  
+  // Detect if content is Urdu (contains Arabic script characters)
+  const isUrdu = /[\u0600-\u06FF]/.test(content);
+
+  console.log('[ContentOverlay] Rendering overlay, content length:', content.length, 'isUrdu:', isUrdu);
 
   // Use portal to render overlay at document.body level for proper z-index stacking
   return ReactDOM.createPortal(
@@ -47,31 +52,50 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
         overflow: 'auto',
       }}
     >
+      {/* VISUAL BANNER - Makes it obvious this is AI content */}
+      <div
+        style={{
+          backgroundColor: isUrdu ? '#198754' : '#0d6efd',
+          color: 'white',
+          padding: '12px 20px',
+          textAlign: 'center',
+          fontWeight: 'bold',
+          fontSize: '16px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10001,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <span>
+          {isUrdu ? '🌐 اردو ترجمہ (Urdu Translation)' : '✨ AI Personalized Content'}
+        </span>
+        <button
+          onClick={onClose}
+          style={{
+            backgroundColor: 'rgba(255,255,255,0.2)',
+            color: 'white',
+            border: '2px solid white',
+            borderRadius: '6px',
+            padding: '8px 16px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+          }}
+        >
+          ✕ Close & Show Original
+        </button>
+      </div>
+      
       <div
         style={{
           maxWidth: '800px',
           margin: '0 auto',
           padding: '20px',
+          direction: isUrdu ? 'rtl' : 'ltr',
         }}
       >
-        <button
-          onClick={onClose}
-          style={{
-            position: 'sticky',
-            top: '10px',
-            float: 'right',
-            padding: '8px 16px',
-            backgroundColor: '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            zIndex: 10000,
-          }}
-        >
-          ✕ Close & Show Original
-        </button>
         <div
           className="theme-doc-markdown markdown"
           style={{
