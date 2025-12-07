@@ -29,6 +29,9 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
 
   if (!content || !mounted) return null;
 
+  // Detect current theme from document
+  const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+
   // Use portal to render overlay at document.body level for proper z-index stacking
   return ReactDOM.createPortal(
     <div
@@ -39,57 +42,43 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
         right: 0,
         bottom: 0,
         zIndex: 9999,
-        backgroundColor: '#ffffff',
-        color: '#1c1e21',
+        backgroundColor: isDarkMode ? '#1b1b1d' : '#ffffff',
+        color: isDarkMode ? '#e3e3e3' : '#1c1e21',
         overflow: 'auto',
       }}
-      data-theme="light"
     >
-      {/* Dark mode support */}
-      <style>{`
-        [data-theme='dark'] .content-overlay-wrapper {
-          background-color: #1b1b1d !important;
-          color: #e3e3e3 !important;
-        }
-      `}</style>
       <div
-        className="content-overlay-wrapper"
         style={{
-          minHeight: '100vh',
-          backgroundColor: 'var(--ifm-background-color, #ffffff)',
-          color: 'var(--ifm-font-color-base, #1c1e21)',
+          maxWidth: '800px',
+          margin: '0 auto',
+          padding: '20px',
         }}
       >
-        <div
+        <button
+          onClick={onClose}
           style={{
-            maxWidth: '800px',
-            margin: '0 auto',
-            padding: '20px',
+            position: 'sticky',
+            top: '10px',
+            float: 'right',
+            padding: '8px 16px',
+            backgroundColor: '#dc3545',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            zIndex: 10000,
           }}
         >
-          <button
-            onClick={onClose}
-            style={{
-              position: 'sticky',
-              top: '10px',
-              float: 'right',
-              padding: '8px 16px',
-              backgroundColor: '#dc3545',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              zIndex: 10000,
-            }}
-          >
-            ✕ Close & Show Original
-          </button>
-          <div
-            className="theme-doc-markdown markdown"
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
-        </div>
+          ✕ Close & Show Original
+        </button>
+        <div
+          className="theme-doc-markdown markdown"
+          style={{
+            color: isDarkMode ? '#e3e3e3' : '#1c1e21',
+          }}
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
       </div>
     </div>,
     document.body

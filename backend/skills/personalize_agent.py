@@ -52,18 +52,19 @@ def personalize_content(html_content: str, profile: dict) -> str:
 CRITICAL INSTRUCTIONS:
 1. The input is HTML content. You MUST return valid HTML with the EXACT same tag structure.
 2. Preserve ALL HTML tags exactly as they appear (<h1>, <h2>, <p>, <pre>, <code>, <ul>, <li>, etc.)
-3. Adapt explanations and analogies to match the student's background
-4. If student knows Python: use Python-specific analogies (e.g., "like a generator", "similar to asyncio")
-5. If student has GPU: mention GPU-accelerated computing opportunities where relevant
-6. If beginner: add more foundational context; if advanced: assume prerequisite knowledge
-7. Keep the same structure and approximate length
-8. Do NOT wrap output in markdown code blocks - return raw HTML only
-9. Do NOT add any prefix text like "Here is the content:" - start directly with the HTML
+3. MAKE VISIBLE CHANGES to adapt content to the student's background:
+   - If student knows Python: ADD specific Python examples like "Think of ROS nodes like Python coroutines" or "Similar to how asyncio handles events"
+   - If student has GPU: ADD sentences about GPU acceleration like "With your NVIDIA GPU, you can accelerate this with CUDA"
+   - If beginner: ADD foundational explanations like "In other words, ..." or "Simply put, ..."
+   - If advanced: REMOVE basic explanations and ADD advanced tips
+4. The changes MUST be noticeable - add at least 1-2 new sentences per paragraph that relate to the user's background
+5. Do NOT wrap output in markdown code blocks - return raw HTML only
+6. Do NOT add any prefix text - start directly with the HTML
 
 Original HTML content:
 {html_content}
 
-Return ONLY the modified HTML content with personalized text. Start directly with the first HTML tag.
+Return ONLY the modified HTML content with VISIBLE personalized changes. Start directly with the first HTML tag.
 """
 
     # Use Gemini 1.5 Flash (often has higher rate limits than 2.5)
