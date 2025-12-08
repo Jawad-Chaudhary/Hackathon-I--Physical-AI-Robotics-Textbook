@@ -12,9 +12,9 @@ const config: Config = {
     // // Production URLs - Railway deployments
     authUrl: 'https://hackathon-i-physical-ai-robotics-textbook-production.up.railway.app',
     apiUrl: 'https://clever-respect-production-5202.up.railway.app',
-  //   authUrl: 'http://localhost:3001',
-  //   apiUrl: 'http://localhost:8000'
-  // },
+    //   authUrl: 'http://localhost:3001',
+    //   apiUrl: 'http://localhost:8000'
+  },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
