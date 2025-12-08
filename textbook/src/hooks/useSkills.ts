@@ -52,6 +52,7 @@ export function useSkills() {
     }
 
     try {
+      console.log(`[Personalize] Sending request to: ${API_BASE_URL}/api/personalize`); // DEBUG LOG
       const response = await fetch(`${API_BASE_URL}/api/personalize`, {
         method: 'POST',
         headers: {
@@ -64,6 +65,7 @@ export function useSkills() {
         }),
         credentials: 'include',
       });
+      console.log(`[Personalize] Response status: ${response.status}`); // DEBUG LOG
 
       if (!response.ok) {
         let errorMsg = 'Personalization failed';
@@ -80,8 +82,13 @@ export function useSkills() {
 
       const data: PersonalizeResponse = await response.json();
       setState({ isLoading: false, error: null });
-      return data.personalized_content;
+
+      // Strip debug logs if present
+      const cleanContent = data.personalized_content.replace(/^\[PERSONALIZE_AGENT\].*$/gm, '').trim();
+
+      return cleanContent;
     } catch (err) {
+      console.error('[Personalize] Fetch error details:', err); // DEBUG LOG
       const errorMessage = err instanceof Error ? err.message : 'Network error';
       setState({ isLoading: false, error: errorMessage });
       alert(`Personalization failed: ${errorMessage}`);

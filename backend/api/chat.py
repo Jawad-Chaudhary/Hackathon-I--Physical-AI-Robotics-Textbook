@@ -54,7 +54,7 @@ def chat_with_textbook(
 
     # Generate answer with Gemini
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
 
         prompt = f"""You are a robotics tutor. Answer questions based on the provided textbook context.
 Cite sections using format 'See Chapter X.Y: Title'.

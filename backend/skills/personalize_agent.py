@@ -49,29 +49,46 @@ def personalize_content(html_content: str, profile: dict) -> str:
 
     prompt = f"""You are rewriting educational robotics content for a student who is {bg_str} with {experience} experience level.
 
-CRITICAL INSTRUCTIONS:
-1. The input is HTML content. You MUST return valid HTML with the EXACT same tag structure.
-2. Preserve ALL HTML tags exactly as they appear (<h1>, <h2>, <p>, <pre>, <code>, <ul>, <li>, etc.)
-3. MAKE VISIBLE CHANGES to adapt content to the student's background:
-   - If student knows Python: ADD specific Python examples like "Think of ROS nodes like Python coroutines" or "Similar to how asyncio handles events"
-   - If student has GPU: ADD sentences about GPU acceleration like "With your NVIDIA GPU, you can accelerate this with CUDA"
-   - If beginner: ADD foundational explanations like "In other words, ..." or "Simply put, ..."
-   - If advanced: REMOVE basic explanations and ADD advanced tips
-4. The changes MUST be noticeable - add at least 1-2 new sentences per paragraph that relate to the user's background
+YOU MUST MAKE THE FOLLOWING VISIBLE CHANGES:
+
+1. ADD A PERSONALIZATION NOTE at the very beginning of the content as the first element:
+   <div style="background-color: #e7f3ff; border-left: 4px solid #0d6efd; padding: 12px; margin-bottom: 16px; border-radius: 4px;">
+   <strong>🎯 Personalized for You:</strong> This content has been adapted for someone who is {bg_str}. Look for Python examples and tips throughout!
+   </div>
+
+2. For EACH major concept, ADD a Python-specific tip or analogy in a highlighted box:
+   <div style="background-color: #d4edda; border-left: 4px solid #28a745; padding: 10px; margin: 10px 0; border-radius: 4px;">
+   <strong>🐍 Python Tip:</strong> [Your Python-specific insight here]
+   </div>
+
+3. ADD at least 3-5 Python analogies throughout the text, like:
+   - "Think of ROS nodes like Python classes with methods"
+   - "Similar to how asyncio handles async/await"
+   - "Like a Python generator yielding values"
+
+4. KEEP all HTML tags intact (<h1>, <h2>, <p>, <code>, <pre>, etc.)
+
 5. Do NOT wrap output in markdown code blocks - return raw HTML only
-6. Do NOT add any prefix text - start directly with the HTML
 
 Original HTML content:
 {html_content}
 
-Return ONLY the modified HTML content with VISIBLE personalized changes. Start directly with the first HTML tag.
+Return the MODIFIED HTML with visible personalization. Start with the personalization note div.
 """
 
-    # Use Gemini 1.5 Flash (often has higher rate limits than 2.5)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # Use Gemini Pro (always available)
+    model = genai.GenerativeModel('gemini-2.5-flash')
+    
+    print(f"[PERSONALIZE_AGENT] Calling Gemini with {len(html_content)} chars input")
+    print(f"[PERSONALIZE_AGENT] Profile: {profile}")
+    print(f"[PERSONALIZE_AGENT] bg_str: {bg_str}")
+    
     response = model.generate_content(prompt)
 
     personalized = response.text
+    
+    print(f"[PERSONALIZE_AGENT] Gemini returned {len(personalized)} chars")
+    print(f"[PERSONALIZE_AGENT] First 200 chars: {personalized[:200]}")
 
     # Strip any markdown code block wrappers if added
     if personalized.startswith("```html"):

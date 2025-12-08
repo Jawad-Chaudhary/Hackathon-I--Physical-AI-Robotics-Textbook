@@ -63,23 +63,31 @@ def translate_to_urdu(html_content: str) -> str:
 
     prompt = f"""Translate the following educational HTML content to Urdu.
 
-CRITICAL RULES:
-1. Translate ONLY the text content inside HTML tags (between > and <)
-2. Keep ALL HTML tags exactly as they are (<h1>, <p>, <div>, <span>, etc.)
-3. Keep all placeholders (___CODE_BLOCK_N___) EXACTLY as they are - do not translate them
-4. Keep all HTML attributes unchanged (class="", id="", etc.)
-5. Preserve the exact HTML structure - do not add or remove any tags
+YOU MUST:
+
+1. ADD A TRANSLATION BANNER at the very beginning:
+   <div style="background-color: #d4edda; border-left: 4px solid #198754; padding: 12px; margin-bottom: 16px; border-radius: 4px; direction: rtl; text-align: right;">
+   <strong>🌐 اردو ترجمہ:</strong> یہ مواد اردو میں ترجمہ کیا گیا ہے۔ کوڈ بلاکس انگریزی میں ہیں۔
+   </div>
+
+2. Translate ALL text content to Urdu (between > and <)
+
+3. Keep ALL HTML tags exactly as they are (<h1>, <p>, <div>, <span>, etc.)
+
+4. Keep all placeholders (___CODE_BLOCK_N___) EXACTLY as they are
+
+5. Keep all HTML attributes unchanged (class="", id="", etc.)
+
 6. Do NOT wrap output in markdown code blocks - return raw HTML only
-7. Do NOT add any prefix text - start directly with the HTML
 
 HTML content to translate:
 {text_to_translate}
 
-Return ONLY the translated HTML. Start directly with the first HTML tag.
+Return the translated HTML starting with the Urdu translation banner div.
 """
 
-    # Use Gemini 1.5 Flash (often has higher rate limits)
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # Use Gemini Pro (always available)
+    model = genai.GenerativeModel('gemini-2.5-flash')
     response = model.generate_content(prompt)
 
     translated = response.text

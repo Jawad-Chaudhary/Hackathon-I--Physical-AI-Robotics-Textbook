@@ -37,7 +37,7 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
 
   console.log('[ContentOverlay] Rendering overlay, content length:', content.length, 'isUrdu:', isUrdu);
 
-  // Use portal to render overlay at document.body level for proper z-index stacking
+  // Use portal to render overlay at document.body level
   return ReactDOM.createPortal(
     <div
       style={{
@@ -52,36 +52,30 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
         overflow: 'auto',
       }}
     >
-      {/* VISUAL BANNER - Makes it obvious this is AI content */}
+      {/* Close button bar */}
       <div
         style={{
-          backgroundColor: isUrdu ? '#198754' : '#0d6efd',
-          color: 'white',
-          padding: '12px 20px',
-          textAlign: 'center',
-          fontWeight: 'bold',
-          fontSize: '16px',
+          backgroundColor: isDarkMode ? '#2d2d2d' : '#f5f5f5',
+          padding: '10px 20px',
           position: 'sticky',
           top: 0,
           zIndex: 10001,
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          justifyContent: 'flex-end',
+          borderBottom: `1px solid ${isDarkMode ? '#404040' : '#e0e0e0'}`,
         }}
       >
-        <span>
-          {isUrdu ? '🌐 اردو ترجمہ (Urdu Translation)' : '✨ AI Personalized Content'}
-        </span>
         <button
           onClick={onClose}
           style={{
-            backgroundColor: 'rgba(255,255,255,0.2)',
+            backgroundColor: '#dc3545',
             color: 'white',
-            border: '2px solid white',
+            border: 'none',
             borderRadius: '6px',
-            padding: '8px 16px',
+            padding: '10px 20px',
             cursor: 'pointer',
             fontWeight: 'bold',
+            fontSize: '14px',
           }}
         >
           ✕ Close & Show Original
@@ -90,9 +84,9 @@ function ContentOverlay({ content, onClose }: ContentOverlayProps) {
       
       <div
         style={{
-          maxWidth: '800px',
+          maxWidth: '900px',
           margin: '0 auto',
-          padding: '20px',
+          padding: '30px 20px',
           direction: isUrdu ? 'rtl' : 'ltr',
         }}
       >
@@ -170,8 +164,6 @@ function DocItemToolbar() {
     setTransformedContent(null);
   };
 
-  console.log('[DocItemToolbar] Render state:', { isLoading, isAuthenticated, isReady, contentLength: originalContent.length });
-
   if (isLoading) {
     return null;
   }
@@ -218,6 +210,8 @@ function DocItemToolbar() {
           alignItems: 'center',
           gap: '10px',
           flexWrap: 'wrap',
+          // Ensure it's separate from content
+          marginTop: '1rem',
         }}
       >
         <span style={{ marginRight: '10px', color: '#155724', fontWeight: 500 }}>
@@ -241,81 +235,16 @@ function DocItemToolbar() {
   );
 }
 
-// Creates a portal container at the top of doc content and renders toolbar into it
-function ToolbarPortal() {
-  const location = useLocation();
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    // Reset on page change
-    setPortalContainer(null);
-
-    const setupPortal = () => {
-      // Check if portal container already exists
-      let container = document.getElementById('ai-toolbar-portal');
-      if (container) {
-        setPortalContainer(container);
-        return;
-      }
-
-      // Find the markdown content area
-      const selectors = [
-        '.theme-doc-markdown',
-        '[class*="docItemContent"]',
-        '.markdown',
-        'article',
-      ];
-
-      for (const selector of selectors) {
-        const target = document.querySelector(selector);
-        if (target) {
-          // Create portal container
-          container = document.createElement('div');
-          container.id = 'ai-toolbar-portal';
-          // Insert at the very beginning of the content
-          target.insertBefore(container, target.firstChild);
-          setPortalContainer(container);
-          break;
-        }
-      }
-    };
-
-    // Try immediately and with delays
-    setupPortal();
-    const timer1 = setTimeout(setupPortal, 100);
-    const timer2 = setTimeout(setupPortal, 300);
-
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      // Clean up portal container on unmount
-      const container = document.getElementById('ai-toolbar-portal');
-      if (container) {
-        container.remove();
-      }
-    };
-  }, [location.pathname]);
-
-  if (!portalContainer) return null;
-
-  return ReactDOM.createPortal(
-    <div style={{ marginBottom: '20px' }}>
-      <DocItemToolbar />
-    </div>,
-    portalContainer
-  );
-}
-
 export default function LayoutWrapper(props: Props): ReactNode {
   return (
-    <>
-      <Layout {...props} />
+    <Layout {...props}>
       <BrowserOnly fallback={null}>
-        {() => <ToolbarPortal />}
+        {() => <DocItemToolbar />}
       </BrowserOnly>
+      {props.children}
       <BrowserOnly fallback={null}>
         {() => <ChatWidget />}
       </BrowserOnly>
-    </>
+    </Layout>
   );
 }
